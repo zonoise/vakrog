@@ -16,8 +16,11 @@
 
 package com.example;
 
+import com.example.controller.BacklogAuthController;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -37,6 +40,7 @@ import java.util.Map;
 @Controller
 @SpringBootApplication
 public class Main {
+  private static final Logger logger = LoggerFactory.getLogger(BacklogAuthController.class);
 
   @Value("${spring.datasource.url}")
   private String dbUrl;
@@ -50,6 +54,9 @@ public class Main {
 
   @RequestMapping("/")
   String index() {
+
+    logger.info("aaaaaaaa","aaaaaaaaa");
+
     return "index";
   }
 

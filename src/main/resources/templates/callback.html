@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'error')}">
+
+<body>
+
+<form th:action="${rest_url}" th:object="${formData}" method="post">
+    <input type="text" th:field="*{grant_type}">
+    <input type="text" th:field="*{client_id}">
+    <input type="text" th:field="*{code}">
+    <input type="text" th:field="*{client_secret}">
+    <input type="submit">
+    </form>
+</body>
+
+</html>
