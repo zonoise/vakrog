@@ -52,11 +52,6 @@ public class Main {
     SpringApplication.run(Main.class, args);
   }
 
-  @RequestMapping("/")
-  String index() {
-
-    return "index";
-  }
 
   @RequestMapping("/db")
   String db(Map<String, Object> model) {
