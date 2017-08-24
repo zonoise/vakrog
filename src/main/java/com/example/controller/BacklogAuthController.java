@@ -42,7 +42,7 @@ public class BacklogAuthController {
 
     @RequestMapping("/spaceform")
     public String spaceForm(Model model){
-        return "spaceform";
+        return "spaceForm";
     }
 
     @RequestMapping("/login")
