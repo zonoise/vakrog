@@ -34,10 +34,6 @@ import java.net.MalformedURLException;
 public class BacklogAuthController {
     private static final Logger logger = LoggerFactory.getLogger(BacklogAuthController.class);
 
-
-    @Value("${backlog.spaceid}")
-    private String spaceId;
-
     @Value("${backlog.apikey}")
     private String apiKey;
 
@@ -152,23 +148,6 @@ public class BacklogAuthController {
            // transport.shutdown();
         }
         return null;
-    }
-
-    @RequestMapping("/gettoken")
-    public String getToken(@RequestParam("code") String code, Model model){
-        try {
-
-            BacklogConfigure configure = new BacklogJpConfigure(spaceId).apiKey(apiKey);
-            BacklogOAuthSupport support = new BacklogOAuthSupport(configure);
-            support.setOAuthClientId(apiKey, apiSecret);
-
-            //NullPointerException で落ちる
-            AccessToken accessToken = support.getOAuthAccessToken(code);
-
-        }catch (MalformedURLException e){
-
-        }
-        return "gettoken";
     }
 
     public static class OAuthAccessTokenResponse extends GenericData {
