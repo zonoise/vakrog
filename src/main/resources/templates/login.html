@@ -3,9 +3,12 @@
 <html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'error')}">
 
 <body>
-<p th:text="${url}">Exception message</p>
-<p><a th:href="${url}">link</a></p>
-
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-12 text-center">
+            <p><a type="button" class="btn btn-primary" th:href="${url}">Login(Backlogへ)</a></p>
+        </div>
+    </div>
+</div>
 </body>
-
 </html>
