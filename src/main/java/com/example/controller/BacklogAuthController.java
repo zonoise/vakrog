@@ -43,8 +43,17 @@ public class BacklogAuthController {
     @Value("${backlog.apisecret}")
     private String apiSecret;
 
+    @RequestMapping("/spaceform")
+    public String spaceForm(Model model){
+        return "spaceform";
+    }
+
     @RequestMapping("/login")
-    public String login(Model model){
+    public String login(@RequestParam(required = false,name="space") String space, Model model){
+
+        if(null == space || 0 == space.length() ){
+            return "redirect:/spaceform";
+        }
 
         try {
 
@@ -55,7 +64,6 @@ public class BacklogAuthController {
             String url = support.getOAuthAuthorizationURL();
             model.addAttribute("url",url);
 
-            logger.info(this.getClass().toString() + "{}",apiKey);
         }catch (MalformedURLException e){
             //todo
         }
@@ -64,7 +72,11 @@ public class BacklogAuthController {
     }
 
     @RequestMapping("/callback")
-    public String callback(@RequestParam("code") String code, Model model) throws IOException {
+    public String callback(@RequestParam(required = false,name="space") String space,
+                           @RequestParam("code") String code,
+                           Model model ) throws IOException
+    {
+        logger.debug("callback space:{}",space);
         try{
             BacklogConfigure configure = new BacklogJpConfigure(spaceId).apiKey(apiKey);
 
@@ -108,7 +120,8 @@ public class BacklogAuthController {
         return "callback";
     }
 
-    private OAuthAccessTokenResponse getOAuthAccessToken(String url,GenericData data) throws IOException {
+    private OAuthAccessTokenResponse getOAuthAccessToken(String url,GenericData data) throws IOException
+    {
 
         HttpTransport httpTransport = new NetHttpTransport();
         try {
