@@ -55,8 +55,6 @@ public class Main {
   @RequestMapping("/")
   String index() {
 
-    logger.info("aaaaaaaa","aaaaaaaaa");
-
     return "index";
   }
 
