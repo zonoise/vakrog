@@ -23,6 +23,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
@@ -49,15 +50,19 @@ public class BacklogAuthController {
     }
 
     @RequestMapping("/login")
-    public String login(@RequestParam(required = false,name="space") String space, Model model){
+    public String login(@RequestParam(required = false,name="space") String space,
+                        Model model,
+                        HttpSession session){
 
         if(null == space || 0 == space.length() ){
             return "redirect:/spaceform";
+        }else {
+            session.setAttribute("space",space);
         }
 
         try {
 
-            BacklogConfigure configure = new BacklogJpConfigure(spaceId).apiKey(apiKey);
+            BacklogConfigure configure = new BacklogJpConfigure(space).apiKey(apiKey);
 
             BacklogOAuthSupport support = new BacklogOAuthSupport(configure);
             support.setOAuthClientId(apiKey,apiSecret);
@@ -72,27 +77,16 @@ public class BacklogAuthController {
     }
 
     @RequestMapping("/callback")
-    public String callback(@RequestParam(required = false,name="space") String space,
-                           @RequestParam("code") String code,
-                           Model model ) throws IOException
+    public String callback(@RequestParam("code") String code,
+                           Model model,
+    HttpSession session) throws IOException
     {
-        logger.debug("callback space:{}",space);
+
+        String space = (String)session.getAttribute("space");
+
+        logger.info("callback space:{}",space);
         try{
-            BacklogConfigure configure = new BacklogJpConfigure(spaceId).apiKey(apiKey);
-
-            BacklogOAuthSupport support = new BacklogOAuthSupport(configure);
-            support.setOAuthClientId(apiKey,apiSecret);
-
-            GetOauthAccessTokenForm f = new GetOauthAccessTokenForm();
-
-            f.setRest_url(configure.getOAuthAccessTokenURL());
-            f.setGrant_type("authorization_code");
-            f.setCode(code);
-            f.setClient_id(apiKey);
-            f.setClient_secret(apiSecret);
-
-            model.addAttribute("rest_url",configure.getRestBaseURL()+"/oauth2/token");
-            model.addAttribute("formData",f);
+            BacklogConfigure configure = new BacklogJpConfigure(space).apiKey(apiKey);
 
             GenericData data = new GenericData();
             data.put("grant_type","authorization_code");
@@ -108,10 +102,13 @@ public class BacklogAuthController {
             }
 
             AccessToken accessToken = new AccessToken(d.accessToken,d.expiresIn,d.refreshToken);
-            BacklogConfigure configure2 = new BacklogJpConfigure(spaceId).accessToken(accessToken);
-            BacklogClient backlog = new BacklogClientFactory(configure2).newClient();
+            BacklogConfigure configureAccessToken = new BacklogJpConfigure(space).accessToken(accessToken);
+            BacklogClient backlog = new BacklogClientFactory(configureAccessToken).newClient();
             User backlogUser = backlog.getMyself();
             logger.info("backloguser:{}",backlogUser.toString());
+            model.addAttribute("space",space);
+            model.addAttribute("name",backlogUser.getName());
+            model.addAttribute("userId",backlogUser.getUserId());
 
         }catch (MalformedURLException e){
             //todo
