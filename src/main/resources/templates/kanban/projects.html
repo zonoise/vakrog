@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'kanban/projects')}">
+
+<body>
+
+<form>
+    <select th:each="project : ${projects}">
+        <option>
+            <span th:text="${project.getProjectKey()}"></span>
+        </option>
+    </select>
+</form>
+
+<ul th:each="project : ${projects}">
+    <li>
+        <span th:text="${project.getProjectKey()}"></span>
+    </li>
+</ul>
+
+</body>
+
+</html>

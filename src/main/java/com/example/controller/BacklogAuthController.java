@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import com.example.forms.GetOauthAccessTokenForm;
+import com.example.utils.BacklogApiWrapper;
 import com.google.api.client.http.*;
 import com.google.api.client.http.HttpHeaders;
 import com.google.api.client.http.HttpRequest;
@@ -98,8 +99,11 @@ public class BacklogAuthController {
             }
 
             AccessToken accessToken = new AccessToken(d.accessToken,d.expiresIn,d.refreshToken);
-            BacklogConfigure configureAccessToken = new BacklogJpConfigure(space).accessToken(accessToken);
-            BacklogClient backlog = new BacklogClientFactory(configureAccessToken).newClient();
+
+            session.setAttribute("token",accessToken);
+
+            BacklogClient backlog = BacklogApiWrapper.getClient(space,accessToken);
+
             User backlogUser = backlog.getMyself();
             logger.info("backloguser:{}",backlogUser.toString());
             model.addAttribute("space",space);
