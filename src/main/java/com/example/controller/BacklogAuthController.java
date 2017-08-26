@@ -1,6 +1,5 @@
 package com.example.controller;
 
-import com.example.forms.GetOauthAccessTokenForm;
 import com.example.utils.BacklogApiWrapper;
 import com.google.api.client.http.*;
 import com.google.api.client.http.HttpHeaders;
@@ -10,7 +9,6 @@ import com.google.api.client.util.Key;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.GenericData;
 import com.nulabinc.backlog4j.BacklogClient;
-import com.nulabinc.backlog4j.BacklogClientFactory;
 import com.nulabinc.backlog4j.User;
 import com.nulabinc.backlog4j.auth.AccessToken;
 import com.nulabinc.backlog4j.auth.BacklogOAuthSupport;
@@ -58,9 +56,7 @@ public class BacklogAuthController {
         }
 
         try {
-
             BacklogConfigure configure = new BacklogJpConfigure(space).apiKey(apiKey);
-
             BacklogOAuthSupport support = new BacklogOAuthSupport(configure);
             support.setOAuthClientId(apiKey,apiSecret);
             String url = support.getOAuthAuthorizationURL();
@@ -149,7 +145,6 @@ public class BacklogAuthController {
             throw e;
         } finally {
             httpTransport.shutdown();
-           // transport.shutdown();
         }
         return null;
     }
