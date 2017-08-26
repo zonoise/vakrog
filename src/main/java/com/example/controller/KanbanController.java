@@ -42,7 +42,7 @@ public class KanbanController {
 
         List<Project> projects = client.getProjects();
         model.addAttribute("projects",projects);
-        return "/kanban/projects";
+        return "kanban/projects";
     }
 
     @RequestMapping(value = "/form",method = RequestMethod.GET)
