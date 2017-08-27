@@ -1,9 +1,12 @@
 package com.example.controller;
 
+import com.example.exceptions.VakrogException;
+import com.example.models.Kanban;
 import com.example.utils.BacklogApiWrapper;
 import com.nulabinc.backlog4j.*;
 import com.nulabinc.backlog4j.api.option.GetIssuesParams;
 import com.nulabinc.backlog4j.auth.AccessToken;
+import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -16,6 +19,8 @@ import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Created by zonoise on 2017/08/24.
@@ -46,7 +51,7 @@ public class KanbanController {
     }
 
     @RequestMapping(value = "/form",method = RequestMethod.GET)
-    public String formAxis(@RequestParam(required = false,name="space") String projectKey,
+    public String formAxis(@RequestParam(required = false,name="projectId") String projectId,
                            HttpSession session){
 
         BacklogClient client = getClient(session);
@@ -55,27 +60,57 @@ public class KanbanController {
         }
 
         try {
-            ResponseList<Project> projects = client.getProjects();
-            Project project = projects.get(0);//todo get from request
 
+            ResponseList<Project> projects = client.getProjects();
+
+            Project project = client.getProject(projectId);//todo get from request
+            if(null == project){
+                throw new VakrogException("project not found");
+            }
             List<String> ids = Arrays.asList( project.getIdAsString());
             GetIssuesParams params = new GetIssuesParams(ids);
 
             List<Issue> issues = client.getIssues(params);
             List<Status> statuses = client.getStatuses();
+
             issues.forEach(issue -> {
                 logger.debug("issue:{}",issue);
             });
             logger.debug("statuses:{}", statuses.toString());
         }catch (BacklogException e){
             logger.debug("BacklogException:{}", e.toString());
+        }catch (VakrogException e){
+            logger.debug("VakrogException:{}", e.toString());
         }
+
         return "kanban/form";
     }
 
     @RequestMapping(value = "/show",method = RequestMethod.GET)
-    public String show(){
-        return "";
+    public String show(
+//            @RequestParam("x") String x,
+//                       @RequestParam("y") String y,
+                       @RequestParam("projectId") String projectId,
+                                   HttpSession session,Model model){
+
+        BacklogClient client = getClient(session);
+        ResponseList<Status> statuses  = client.getStatuses();
+
+        ResponseList<Issue> issues  = client.getIssues(new GetIssuesParams(Arrays.asList(projectId)));
+        List<User> users = issues.stream().map(
+                issue -> {return issue.getAssignee();}
+        ).distinct().collect(Collectors.toList());
+
+        users.forEach(user -> { logger.debug("user:{}",user.getName());});
+
+        Kanban kanban = new Kanban(issues);
+        Map<Pair<String,String>,List<Issue>> data = kanban.getData();
+
+        model.addAttribute("labelX",kanban.getLabelsX());
+        model.addAttribute("labelY",kanban.getLabelsY());
+        model.addAttribute("data",data);
+
+        return "kanban/show";
     }
 
 }
