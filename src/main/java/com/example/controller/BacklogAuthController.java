@@ -63,7 +63,7 @@ public class BacklogAuthController {
             model.addAttribute("url",url);
 
         }catch (MalformedURLException e){
-            //todo
+            logger.info("MalformedURLException:{}",e);
         }
 
         return "login";
@@ -74,7 +74,6 @@ public class BacklogAuthController {
                            Model model,
     HttpSession session) throws IOException
     {
-
         String space = (String)session.getAttribute("space");
 
         logger.info("callback space:{}",space);
@@ -88,10 +87,9 @@ public class BacklogAuthController {
             data.put("client_secret",apiSecret);
 
             OAuthAccessTokenResponse d = getOAuthAccessToken(configure.getOAuthAccessTokenURL(),data);
-            if(null != d){
-                logger.info("token:{}",d.toString());
-            }else {
+            if(null == d){
                 logger.info("token is null:");
+                return "redirect:/spaceform";
             }
 
             AccessToken accessToken = new AccessToken(d.accessToken,d.expiresIn,d.refreshToken);
@@ -107,7 +105,7 @@ public class BacklogAuthController {
             model.addAttribute("userId",backlogUser.getUserId());
 
         }catch (MalformedURLException e){
-            //todo
+            logger.info("MalformedURLException:{}",e);
         }
 
         return "callback";
@@ -130,7 +128,6 @@ public class BacklogAuthController {
             request.setHeaders(headers);
 
             HttpResponse response = request.execute();
-            logger.info("statuscode:{}",response.getStatusCode());
 
             if(response.isSuccessStatusCode()){
                 OAuthAccessTokenResponse d = response.parseAs(OAuthAccessTokenResponse.class);
@@ -140,8 +137,12 @@ public class BacklogAuthController {
 
                 return d;
             }
+        }catch (HttpResponseException e){
+            int statusCode = e.getStatusCode();
+            logger.debug("HttpResponseException:{}",statusCode);
+
         }catch (java.io.IOException e){
-            logger.debug("exeption:{}",e);
+            logger.debug("IOException:{}",e);
             throw e;
         } finally {
             httpTransport.shutdown();
