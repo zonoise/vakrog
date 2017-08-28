@@ -11,4 +11,6 @@ import java.util.Map;
  */
 public interface KanbanTable extends Map<Pair<String, String>, List<Issue>> {
     public List<Issue> getListAt(String x,String y);
+    public void putIssueAt(String x,String y,Issue issue);
+
 }

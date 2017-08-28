@@ -1,7 +1,6 @@
 package com.example.models;
 
-import com.example.models.kanban.KanbanTable;
-import com.example.models.kanban.KanbanTableImpl;
+import com.example.models.kanban.*;
 import com.nulabinc.backlog4j.Issue;
 import com.nulabinc.backlog4j.ResponseList;
 import com.nulabinc.backlog4j.Status;
@@ -20,7 +19,6 @@ import java.util.stream.Collectors;
 public class Kanban {
     private List<Issue> issues;
 
-
     private Map<Pair<String,String>,List<Issue>> data;
     private List labelsX;
     private List labelsY;
@@ -28,6 +26,22 @@ public class Kanban {
         this.issues = issues;
         grouped();
     }
+
+    public void group(String x,String y){
+        AxisFactory axisFactory = new AxisFactory();
+        List<Label> labelX = axisFactory.createLabels(x,issues);
+        List<Label> labelY = axisFactory.createLabels(y,issues);
+
+        KanbanTable table = new KanbanTableImpl();
+
+        issues.stream().forEach(issue -> {
+            IssueUtil.getIdOfProperty(x,issue);
+            IssueUtil.getIdOfProperty(y,issue);
+
+        });
+    }
+
+
 
     private void grouped(){
         List<User> users = issues.stream().map(
@@ -43,9 +57,11 @@ public class Kanban {
         this.issues.forEach(issue -> {
             String x = issue.getStatus().getIdAsString();
             String y = issue.getAssignee().getIdAsString();
+
             List<Issue> list = map.getOrDefault(Pair.of(x,y),new ArrayList<>());
             list.add(issue);
             map.put(Pair.of(x,y),list);
+
         });
 
         this.labelsX = statuses;
