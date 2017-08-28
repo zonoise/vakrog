@@ -1,5 +1,7 @@
 package com.example.models;
 
+import com.example.models.kanban.KanbanTable;
+import com.example.models.kanban.KanbanTableImpl;
 import com.nulabinc.backlog4j.Issue;
 import com.nulabinc.backlog4j.ResponseList;
 import com.nulabinc.backlog4j.Status;
@@ -49,18 +51,19 @@ public class Kanban {
         this.labelsX = statuses;
         this.labelsY = users;
         this.data = map;
-
     }
 
-    public Map<Pair<String, String>, List<Issue>> getData() {
-        return data;
+    public KanbanTable getData() {
+        KanbanTable table = new KanbanTableImpl();
+        table.putAll(data);
+        return table;
     }
 
-    public List getLabelsX() {
+    public List<Status> getLabelsX() {
         return labelsX;
     }
 
-    public List getLabelsY() {
+    public List<User> getLabelsY() {
         return labelsY;
     }
 }

@@ -2,10 +2,13 @@ package com.example.controller;
 
 import com.example.exceptions.VakrogException;
 import com.example.models.Kanban;
+import com.example.models.kanban.KanbanTable;
 import com.example.utils.BacklogApiWrapper;
 import com.nulabinc.backlog4j.*;
 import com.nulabinc.backlog4j.api.option.GetIssuesParams;
 import com.nulabinc.backlog4j.auth.AccessToken;
+import com.nulabinc.backlog4j.internal.json.IssueJSONImpl;
+import com.nulabinc.backlog4j.internal.json.UserJSONImpl;
 import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -98,18 +101,20 @@ public class KanbanController {
 
         ResponseList<Issue> issues  = client.getIssues(new GetIssuesParams(Arrays.asList(projectId)));
         List<User> users = issues.stream().map(
-                issue -> {return issue.getAssignee();}
-        ).distinct().collect(Collectors.toList());
+                issue -> {User assignee = issue.getAssignee();
+                    if(null == assignee){
+                            logger.debug("assigneee{}:",assignee); //todo
+                    }
+                    return assignee;
+                })
+                .filter( user -> user !=null ).distinct().collect(Collectors.toList());
 
-        users.forEach(user -> { logger.debug("user:{}",user.getName());});
 
         Kanban kanban = new Kanban(issues);
-        Map<Pair<String,String>,List<Issue>> data = kanban.getData();
-
+        KanbanTable data = kanban.getData();
         model.addAttribute("labelX",kanban.getLabelsX());
         model.addAttribute("labelY",kanban.getLabelsY());
         model.addAttribute("data",data);
-
         return "kanban/show";
     }
 
