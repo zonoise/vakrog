@@ -6,7 +6,7 @@
 
 <div class="row">
     <div class="col-xs-12">
-        <table class="table">
+        <table class="table table-bordered">
             <tr>
                 <th> \ </th>
                 <th th:each="x :${labelX}" th:text="${x.name}"></th>
@@ -15,12 +15,12 @@
             <tr th:each="y: ${labelY}">
                 <th th:text="${y.name}"></th>
                 <td th:each="x: ${labelX}">
-                    <th:block th:with="list = ${data.getListAt(x.getIdAsString(),y.getIdAsString())}">
                     <ul>
-                        <li th:each="issue :${list}" th:text="${issue.getSummary()}"></li>
+                        <li th:each="issue : ${data.getListAt(x.getIdAsString(),y.getIdAsString())}" th:text="${issue.getSummary()}">
+                            <a th:href="${issue.}"></a>
+                        </li>
                     </ul>
-                    </th:block>
-                <td/>
+                </td>
             </tr>
         </table>
     </div>
