@@ -4,7 +4,7 @@
 
 <body>
 
-<form th:action="@{/kanban/show}" method="get">
+<form th:action="@{/kanban/form}" method="get">
     <select name="projectId" th:each="project : ${projects}">
         <option th:value="${project.getId()}">
             <span th:text="${project.getProjectKey()}"></span>

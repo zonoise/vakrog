@@ -13,12 +13,12 @@ public class MilestoneLabel implements Label {
     }
 
     @Override
-    public String name() {
+    public String getName() {
         return this.milestone.getName();
     }
 
     @Override
-    public String Id() {
+    public String getId() {
         return this.milestone.getIdAsString();
     }
 }

@@ -12,12 +12,12 @@ public class StatusLabel implements Label {
     }
 
     @Override
-    public String name() {
+    public String getName() {
         return this.status.getName();
     }
 
     @Override
-    public String Id() {
+    public String getId() {
         return status.getIdAsString();
     }
 }

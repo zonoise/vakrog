@@ -13,12 +13,12 @@ public class UserLabel implements Label {
     }
 
     @Override
-    public String name() {
+    public String getName(){
         return user.getName();
     }
 
     @Override
-    public String Id() {
+    public String getId() {
         return user.getIdAsString();
     }
 }

@@ -16,8 +16,8 @@
                 <th th:text="${y.name}"></th>
                 <td th:each="x: ${labelX}">
                     <ul>
-                        <li th:each="issue : ${data.getListAt(x.getIdAsString(),y.getIdAsString())}" th:text="${issue.getSummary()}">
-                            <a th:href="${issue.}"></a>
+                        <li th:each="issue : ${data.getListAt(x.id,y.id)}" th:text="${issue.getSummary()}">
+
                         </li>
                     </ul>
                 </td>

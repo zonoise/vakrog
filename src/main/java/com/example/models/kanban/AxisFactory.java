@@ -1,5 +1,6 @@
 package com.example.models.kanban;
 
+import com.example.models.kanban.defaultValue.UserNone;
 import com.nulabinc.backlog4j.Issue;
 import com.nulabinc.backlog4j.Status;
 import com.nulabinc.backlog4j.User;
@@ -28,7 +29,11 @@ public class AxisFactory {
             case "user":
                 return issueStream.map(
                         issue -> {
-                            return issue.getAssignee();
+                            User asignee = issue.getAssignee();
+                            if(null == asignee){
+                                asignee = new UserNone();
+                            }
+                            return asignee;
                         })
                         .distinct()
                         .map(user -> {

@@ -2,6 +2,7 @@ package com.example.models.kanban;
 
 import com.nulabinc.backlog4j.Issue;
 import com.nulabinc.backlog4j.Milestone;
+import com.nulabinc.backlog4j.User;
 
 import java.util.Optional;
 
@@ -12,7 +13,14 @@ public class IssueUtil {
     public static String getIdOfProperty(String propertyName, Issue issue){
         switch (propertyName){
             case "user":
-                return issue.getAssignee().getIdAsString();
+
+                User u = issue.getAssignee();
+                if(null != u){
+                    return u.getIdAsString();
+                }else {
+                    return "NONE";
+                }
+
             case "status":
                 return issue.getStatus().getIdAsString();
             case "milestone":
