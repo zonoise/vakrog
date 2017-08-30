@@ -3,15 +3,25 @@
 <html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'kanban/projects')}">
 
 <body>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            <form th:action="@{/kanban/form}" method="get">
+                <div class="form-group">
+                    <label class="control-label">Project</label>
+                    <select class="form-control" name="projectId" th:each="project : ${projects}">
+                        <option  th:value="${project.getId()}">
+                            <span th:text="${project.getProjectKey()}"></span>
+                        </option>
+                    </select>
+                </div>
 
-<form th:action="@{/kanban/form}" method="get">
-    <select name="projectId" th:each="project : ${projects}">
-        <option th:value="${project.getId()}">
-            <span th:text="${project.getProjectKey()}"></span>
-        </option>
-    </select>
-    <input type="submit">
-</form>
+                </select>
+                <input type="submit" class="btn btn-lg btn-primary btn-block" value="Submit">
+            </form>
+        </div>
+    </div>
+</div>
 </body>
 
 </html>

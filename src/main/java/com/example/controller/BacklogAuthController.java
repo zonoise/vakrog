@@ -131,10 +131,6 @@ public class BacklogAuthController {
 
             if(response.isSuccessStatusCode()){
                 OAuthAccessTokenResponse d = response.parseAs(OAuthAccessTokenResponse.class);
-
-                logger.debug("OAuthAccessTokenResponse:{}",d);
-                logger.debug("OAuthAccessTokenResponse token :{}",d.accessToken);
-
                 return d;
             }
         }catch (HttpResponseException e){

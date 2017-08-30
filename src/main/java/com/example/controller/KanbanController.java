@@ -91,13 +91,12 @@ public class KanbanController {
 
         Kanban kanban = new Kanban(issues);
         kanban.group(axisX.getCode(),axisY.getCode());
-//        kanban.group("status","user");
-//        kanban.group("milestone","user");
 
         KanbanTable data = kanban.getData();
         model.addAttribute("labelX",kanban.getLabelsX());
         model.addAttribute("labelY",kanban.getLabelsY());
         model.addAttribute("data",data);
+        model.addAttribute("projectId",projectId);
         return "kanban/show";
     }
 

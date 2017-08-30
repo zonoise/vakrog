@@ -3,11 +3,19 @@
 <html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'error')}">
 
 <body>
-
-<p th:text="${name}"></p>
-<p th:text="${space}"></p>
-<p th:text="${userId}"></p>
-
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            <h1>Login Success</h1>
+            <table>
+                <tr><th>UserId</th></th><td th:text="${userId}"></td></tr>
+                <tr><th>UserName</th><td th:text="${name}"></td></tr>
+                <tr><th>Space</th></th><td th:text="${space}"></td></tr>
+                <tr></tr>
+            </table>
+            <a th:href="@{/kanban/projects}" class="btn btn-lg btn-primary btn-block">Select Project</a>
+        </div>
+    </div>
+</div>
 </body>
-
 </html>
