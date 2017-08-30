@@ -3,28 +3,29 @@
 <html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'kanban/show')}">
 
 <body>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            <a th:href="@{/kanban/projects}" class="btn btn-default"><span class="fa fa-angle-left" aria-hidden="true"></span> Select Project</a>
+            <a th:href="@{/kanban/form(projectId=${projectId})}" class="btn btn-default"><span class="fa fa-angle-left" aria-hidden="true"></span> Select Axes</a>
+            <table class="table table-bordered">
+                <tr>
+                    <th> \ </th>
+                    <th th:each="x :${labelX}" th:text="${x.name}"></th>
+                <tr>
 
-<div class="row">
-    <div class="col-xs-12">
-        <a th:href="@{/kanban/projects}" class="btn btn-default"><span class="fa fa-angle-left" aria-hidden="true"></span>Select Project</a>
-        <a th:href="@{/kanban/form(projectId=${projectId})}" class="btn btn-default"><span class="fa fa-angle-left" aria-hidden="true"></span>Select Axes</a>
-        <table class="table table-bordered">
-            <tr>
-                <th> \ </th>
-                <th th:each="x :${labelX}" th:text="${x.name}"></th>
-            <tr>
+                <tr th:each="y: ${labelY}">
+                    <th th:text="${y.name}"></th>
+                    <td th:each="x: ${labelX}">
+                        <ul>
+                            <li th:each="issue : ${data.getListAt(x.id,y.id)}" th:text="${issue.getSummary()}">
 
-            <tr th:each="y: ${labelY}">
-                <th th:text="${y.name}"></th>
-                <td th:each="x: ${labelX}">
-                    <ul>
-                        <li th:each="issue : ${data.getListAt(x.id,y.id)}" th:text="${issue.getSummary()}">
-
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-        </table>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+        </div>
     </div>
 </div>
 
