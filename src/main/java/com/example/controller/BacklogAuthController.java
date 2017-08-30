@@ -111,6 +111,13 @@ public class BacklogAuthController {
         return "callback";
     }
 
+    @RequestMapping("/logout")
+    public String callback(HttpSession session)
+    {
+        session.invalidate();
+        return "logout";
+    }
+
     private OAuthAccessTokenResponse getOAuthAccessToken(String url,GenericData data) throws IOException
     {
 
