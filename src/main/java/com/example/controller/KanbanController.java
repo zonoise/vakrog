@@ -21,7 +21,6 @@ import javax.servlet.http.HttpSession;
 import java.util.Arrays;
 import java.util.List;
 
-import static java.lang.String.valueOf;
 
 /**
  * Created by zonoise on 2017/08/24.
