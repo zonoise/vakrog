@@ -1,9 +1,7 @@
 package com.example.controller;
 
-import com.example.exceptions.VakrogException;
 import com.example.forms.KanbanAxis;
 import com.example.models.Kanban;
-import com.example.models.kanban.Axis;
 import com.example.models.kanban.KanbanTable;
 import com.example.utils.BacklogApiWrapper;
 import com.nulabinc.backlog4j.*;

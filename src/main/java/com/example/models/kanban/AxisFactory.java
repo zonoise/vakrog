@@ -1,10 +1,12 @@
 package com.example.models.kanban;
 
+import com.example.models.kanban.defaultValue.MilestoneNone;
 import com.example.models.kanban.defaultValue.UserNone;
 import com.nulabinc.backlog4j.Issue;
-import com.nulabinc.backlog4j.Status;
+import com.nulabinc.backlog4j.Milestone;
 import com.nulabinc.backlog4j.User;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -44,8 +46,13 @@ public class AxisFactory {
                 return issueStream.map(issue -> {
                         return issue.getMilestone();
                     }).flatMap(milestones -> {
+                        if(milestones.isEmpty()){
+                            List<Milestone> ms = new ArrayList<Milestone>(){};
+                            ms.add(new MilestoneNone());
+                            return ms.stream();
+                        }
                         return milestones.stream();
-                    }) //oh!
+                    })
                         .distinct().map(milestone -> {
                             return new MilestoneLabel(milestone);
                         })
