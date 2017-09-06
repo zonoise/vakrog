@@ -24,7 +24,9 @@ public class Kanban {
     }
 
     public void group(KanbanAxis x,KanbanAxis y){
+
         AxisFactory axisFactory = new AxisFactory();
+
         List<Label> labelX = axisFactory.createLabels(x,issues);
         List<Label> labelY = axisFactory.createLabels(y,issues);
 
