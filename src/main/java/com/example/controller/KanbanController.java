@@ -1,6 +1,6 @@
 package com.example.controller;
 
-import com.example.forms.KanbanAxis;
+import com.example.models.kanban.KanbanAxis;
 import com.example.models.Kanban;
 import com.example.models.kanban.KanbanTable;
 import com.example.utils.BacklogApiWrapper;
@@ -87,7 +87,7 @@ public class KanbanController {
         ResponseList<Issue> issues  = client.getIssues(issueParam.count(issueParamCount));
 
         Kanban kanban = new Kanban(issues);
-        kanban.group(axisX.getCode(),axisY.getCode());
+        kanban.group(axisX,axisY);
 
         KanbanTable data = kanban.getData();
         model.addAttribute("labelX",kanban.getLabelsX());

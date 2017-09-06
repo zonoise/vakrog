@@ -1,13 +1,9 @@
 package com.example.models.kanban;
 
 import com.nulabinc.backlog4j.Issue;
-import com.nulabinc.backlog4j.Milestone;
 import com.nulabinc.backlog4j.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Arrays;
-import java.util.Optional;
 
 /**
  * Created by zonoise on 2017/08/29.
@@ -15,8 +11,8 @@ import java.util.Optional;
 public class IssueUtil {
     private static final Logger logger = LoggerFactory.getLogger(IssueUtil.class);
 
-    public static String[] getIdsOfProperty(String propertyName, Issue issue){
-        switch (propertyName){
+    public static String[] getIdsOfProperty(KanbanAxis axis, Issue issue){
+        switch (axis.getCode()){
             case "user":
                 User u = issue.getAssignee();
                 if(null != u){

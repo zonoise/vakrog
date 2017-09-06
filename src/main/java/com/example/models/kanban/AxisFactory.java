@@ -15,9 +15,9 @@ import java.util.stream.Stream;
  * Created by zonoise on 2017/08/29.
  */
 public class AxisFactory {
-    public List<Label> createLabels(String label, List<Issue> issues) {
+    public List<Label> createLabels(KanbanAxis label, List<Issue> issues) {
         Stream<Issue> issueStream = issues.stream();
-        switch (label) {
+        switch (label.getCode()) {
             case "status":
                 return issueStream.
                         map(issue -> {
