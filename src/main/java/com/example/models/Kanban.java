@@ -17,8 +17,8 @@ public class Kanban {
     private List<Issue> issues;
 
     private KanbanTable data;
-    private List labelsX;
-    private List labelsY;
+    private List<Label> labelsX;
+    private List<Label> labelsY;
     public Kanban(List<Issue> issues) {
         this.issues = issues;
     }
@@ -34,8 +34,8 @@ public class Kanban {
 
         issues.stream().forEach(issue -> {
 
-            String[] idsX = IssueUtil.getIdsOfProperty(x,issue);//todo property is List ex) milestone
-            String[] idsY = IssueUtil.getIdsOfProperty(y,issue);
+            List<String> idsX = IssueUtil.getIdsOfProperty(x,issue);
+            List<String> idsY = IssueUtil.getIdsOfProperty(y,issue);
 
             for(String idx : idsX){
                 for(String idy : idsY){

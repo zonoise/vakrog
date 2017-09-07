@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by zonoise on 2017/08/29.
@@ -16,28 +17,11 @@ import java.util.List;
 public class IssueUtil {
     private static final Logger logger = LoggerFactory.getLogger(IssueUtil.class);
 
-    //todo これ消す
-    public static String[] getIdsOfProperty(KanbanAxis axis, Issue issue){
-        switch (axis.getCode()){
-            case "user":
-                User u = issue.getAssignee();
-                if(null != u){
-                    return new String[]{u.getIdAsString()};
-                }else {
-                    return new String[]{"-1"};
-                }
-
-            case "status":
-                return new String[]{issue.getStatus().getIdAsString()};
-            case "milestone":
-                 String[] ids = issue.getMilestone().stream().map(milestone -> milestone.getIdAsString())
-                        .toArray(String[]::new);
-                 if(ids.length == 0){
-                     ids = new String[]{"-1"};
-                 }
-                 return ids;
-        }
-        return null;
+    public static List<String> getIdsOfProperty(KanbanAxis axis, Issue issue){
+        List<Label> labels = getLabels(axis,issue);
+        List<String> ids = labels.stream().map(label -> label.getId()
+        ).collect(Collectors.toList());
+        return ids;
     }
 
     public static List<Label> getLabels(KanbanAxis axis, Issue issue){
